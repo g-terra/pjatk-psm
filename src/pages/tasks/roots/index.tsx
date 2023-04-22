@@ -52,37 +52,42 @@ export default function NonLinearEquationRoots() {
         setParams(params);
     }
 
-    return (
 
-        <div className="min-h-screen flex flex-col items-center justify-start gap-12 mt-16">
-            {/*keep the title centered and the home button on the left side*/}
-            <div className="flex flex-row items-center justify-center">
+    return (
+        <div className="min-h-screen">
+            <div className="flex flex-col items-center justify-start p-16 gap-8">
+
                 <Link href="/" passHref>
                     <button
-                        className="absolute top-4 left-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        className="absolute top-4 left-4 sm:left-8 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Home
                     </button>
                 </Link>
-                <h1 className="text-3xl font-bold">Non Linear Equation Roots</h1>
+
+                <h1 className="text-2xl sm:text-3xl font-bold">Non Linear Equation Roots</h1>
+
+                <p className="text-lg">Find roots of non linear equations using different methods</p>
+
+                <div className="flex flex-col md:flex-row items-start justify-center gap-6">
+                    <ParameterForm onFormSubmit={handleSubmit}></ParameterForm>
+                    {params && <div className="flex flex-col items-center justify-center">
+                        <EquationDisplay equation={params.equation}/>
+                        <EquationChart parameters={params} key={JSON.stringify(params)}/>
+                    </div>}
+                </div>
+
+
+                <div className="overflow-x-auto">
+                    <div className="flex flex-col lg:flex-row items-center justify-center gap-4">
+                        {
+                            results.map((result, index) => {
+                                return <ResultCard result={result} key={index}></ResultCard>
+                            })
+                        }
+                    </div>
+                </div>
             </div>
 
-            <p className="text-lg">Find roots of non linear equations using different methods</p>
-            <div className="flex flex-row items-start justify-start ">
-                <div>
-                    <ParameterForm onFormSubmit={handleSubmit}></ParameterForm>
-                </div>
-                {params && <div className="flex flex-col items-center justify-center">
-                    <EquationDisplay equation={params.equation}/>
-                    <EquationChart parameters={params} key={JSON.stringify(params)}/>
-                </div>}
-            </div>
-            <div className="flex flex-row items-center justify-center gap-4">
-                {
-                    results.map((result, index) => {
-                        return <ResultCard result={result} key={index}></ResultCard>
-                    })
-                }
-            </div>
 
         </div>
     );

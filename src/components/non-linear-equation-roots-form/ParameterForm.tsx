@@ -27,7 +27,7 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
     };
 
     return (
-            <div className="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
+            <div className="bg-white p-8 rounded-lg shadow-md w-full">
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     <div>
                         <label htmlFor="constants" className="block text-sm font-medium">
@@ -114,9 +114,9 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
                     <div>
                         <button
                             type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
                         >
-                            Submit
+                            Find Roots
                         </button>
                     </div>
                 </form>
