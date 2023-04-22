@@ -14,7 +14,7 @@ interface Props {
     onFormSubmit: (data: FormData) => void;
 }
 
-const ParameterForm: FC = ({onFormSubmit} : Props ) => {
+const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
     const {
         register,
         handleSubmit,

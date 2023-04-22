@@ -14,7 +14,7 @@ export default function NonLinearEquationRoots() {
 
     //state to keep result in a list
     const [results, setResults] = React.useState<Result[]>([]);
-    const [params, setParams] = React.useState<Parameters>(null);
+    const [params, setParams] = React.useState<Parameters | null>(null);
 
 
     useEffect(() => {

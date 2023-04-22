@@ -2,7 +2,7 @@ import React, {FC, useEffect, useRef, useState} from 'react';
 import {FunctionPlotOptions} from 'function-plot/dist/types';
 import Parameters from "@/lib/root-finder/Parameters";
 
-let functionPlot;
+let functionPlot : any;
 
 async function loadFunctionPlot() {
     const [module] = await Promise.all([import('function-plot')]);
@@ -35,11 +35,7 @@ export default EquationChart;
 
 class funcOptions implements FunctionPlotOptions {
     target: string;
-    data: {
-        fn: string;
-        sampler: string;
-        graphType: string;
-    }[];
+    data: any[];
     grid: boolean;
     yAxis: {
         domain: number[];
