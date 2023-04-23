@@ -1,8 +1,9 @@
 import React, {FC, useEffect, useRef, useState} from 'react';
 import {FunctionPlotOptions} from 'function-plot/dist/types';
 import Parameters from "@/lib/root-finder/Parameters";
+import EquationDisplay from "@/components/line-chart/EquationDisplay";
 
-let functionPlot : any;
+let functionPlot: any;
 
 async function loadFunctionPlot() {
     const [module] = await Promise.all([import('function-plot')]);
@@ -13,22 +14,43 @@ loadFunctionPlot().then(r => console.log(r));
 
 type LineChartProps = {
     parameters: Parameters;
+    height?: number;
+    width?: number;
+
+    showEquation?: boolean;
 };
 
-const EquationChart: FC<LineChartProps> = ({parameters}) => {
+const EquationChart: FC<LineChartProps> = ({parameters, height = 400, width = 600, showEquation = false}) => {
     const chartRef = useRef(null);
     const [isLoaded, setIsLoaded] = useState(false);
+    const tailwindWidth = `w-[${width + 100}px]`
+    const tailwindHeight = `h-[${height + 100}px]`
+    const [isLibraryLoaded, setIsLibraryLoaded] = useState(false);
 
     useEffect(() => {
-        if (!isLoaded && functionPlot) {
-            functionPlot(new funcOptions(parameters));
-            setIsLoaded(true);
-        }
-    }, [isLoaded, parameters]);
+        const loadFunctionPlot = async () => {
+            const {default: functionPlot} = await import('function-plot');
+            setIsLibraryLoaded(true);
+            functionPlot(new funcOptions(parameters, height, width));
+        };
 
-    return <div ref={chartRef} id={
-        'chart'
-    }/>;
+        if (!isLoaded) {
+            loadFunctionPlot().then(r => console.log(r));
+        }
+    }, [isLoaded, parameters, height, width, isLibraryLoaded]);
+
+    return (
+        <div className={`flex flex-col items-center justify-center ${tailwindWidth} ${tailwindHeight}`}>
+            <div>
+                <h1 className="text-2xl font-bold">Graph</h1>
+            </div>
+            {showEquation && <EquationDisplay equation={parameters.equation}/>}
+            <div ref={chartRef} id={
+                'chart'
+            }/>
+        </div>
+    )
+        ;
 };
 
 export default EquationChart;
@@ -43,8 +65,10 @@ class funcOptions implements FunctionPlotOptions {
     xAxis: {
         domain: number[];
     };
+    width: number;
+    height: number;
 
-    constructor(parameters: Parameters) {
+    constructor(parameters: Parameters, height: number, width: number) {
         this.target = '#chart';
         this.data = [
             {
@@ -55,10 +79,13 @@ class funcOptions implements FunctionPlotOptions {
         ];
         this.grid = true;
         this.yAxis = {
-            domain: [-10, 10],
+            domain: [-5, 5],
         };
         this.xAxis = {
-            domain: [-10, 10],
+            domain: [-5, 5],
         };
+        this.width = width;
+        this.height = height;
+
     }
 }

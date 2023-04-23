@@ -19,6 +19,9 @@ class Equation {
         return equationString;
     }
 
+    isValid() {
+        return this.constants.length > 0 && this.constants.length === this.powers.length;
+    }
 }
 
 export default Equation;

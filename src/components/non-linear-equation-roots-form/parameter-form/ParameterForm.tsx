@@ -1,6 +1,7 @@
 // components/EquationForm.tsx
 import React, {FC} from 'react';
 import {useForm, FieldPath} from 'react-hook-form';
+import styles from './ParameterForm.module.css';
 
 type FormData = {
     constants: string;
@@ -27,39 +28,34 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
     };
 
     return (
-            <div className="bg-white p-8 rounded-lg shadow-md w-full">
-                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    <div>
-                        <label htmlFor="constants" className="block text-sm font-medium">
+                <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+                    <div className={styles.formInput}>
+                        <label htmlFor="constants" className={styles.formFieldLabel}>
                             Equation Constants (comma-separated list):
                         </label>
                         <input
                             type="text"
                             id="constants"
                             {...register<FieldPath<FormData>>('constants', {required: true})}
-                            className={`border w-full rounded ${
-                                errors.constants ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                            className={styles.formFieldText}
                             placeholder="e.g. 1, -2, 0.5"
                         />
                         {errors.constants && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div>
-                        <label htmlFor="exponents" className="block text-sm font-medium">
+                    <div className={styles.formInput}>
+                        <label htmlFor="exponents" className={styles.formFieldLabel}>
                             Equation Exponents (comma-separated list):
                         </label>
                         <input
                             type="text"
                             id="exponents"
                             {...register<FieldPath<FormData>>('exponents', {required: true})}
-                            className={`border w-full rounded ${
-                                errors.exponents ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                            className={styles.formFieldText}
                             placeholder="e.g. 2, 1, 0"
                         />
                         {errors.exponents && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div>
+                    <div className={styles.formInput}>
                         <label htmlFor="lowerBound" className="block text-sm font-medium">
                             Lower Bound Guess:
                         </label>
@@ -67,14 +63,12 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
                             type="number"
                             id="lowerBound"
                             {...register<FieldPath<FormData>>('lowerBound', {required: true})}
-                            className={`border w-full rounded ${
-                                errors.lowerBound ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                            className={styles.formFieldText}
                             placeholder="e.g. -10"
                         />
                         {errors.lowerBound && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div>
+                    <div className={styles.formInput}>
                         <label htmlFor="upperBound" className="block text-sm font-medium">
                             Upper Bound Guess:
                         </label>
@@ -82,14 +76,12 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
                             type="number"
                             id="upperBound"
                             {...register<FieldPath<FormData>>('upperBound', {required: true})}
-                            className={`border w-full rounded ${
-                                errors.upperBound ? 'border-red-500' : 'border-gray-300'
-                            }`}
+                            className={styles.formFieldText}
                             placeholder="e.g. 10"
                         />
                         {errors.upperBound && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div>
+                    <div className={styles.formInput}>
                         <label htmlFor="precision" className="block text-sm font-medium">
                             Precision (decimal places):
                         </label>
@@ -104,23 +96,15 @@ const ParameterForm: FC<Props> = ({ onFormSubmit }) => {
                                 errors.precision ? 'border-red-500' : 'border-gray-300'
                             }`}
                         />
-                        <div className="flex justify-between text-xs mt-1">
+                        <div className="flex justify-between text-xs mt-1 w-full">
                             {Array.from({length: 10}, (_, i) => i + 1).map((step) => (
                                 <span key={step}>{step}</span>
                             ))}
                         </div>
                         {errors.precision && <p className="text-red-500">This field is required</p>}
                     </div>
-                    <div>
-                        <button
-                            type="submit"
-                            className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 w-full"
-                        >
-                            Find Roots
-                        </button>
-                    </div>
+                    <input className={styles.formSubmit} type="submit" value="Find root"/>
                 </form>
-            </div>
     );
 };
 
