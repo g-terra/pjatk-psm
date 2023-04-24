@@ -1,10 +1,8 @@
 import dynamic from 'next/dynamic';
-import React, {useEffect} from "react";
+import React from "react";
 import {CollisionParameters} from "@/components/collisions/CollisionCanvas";
-import {Particle} from "@/lib/physics-utils/Particle";
+import {Particle} from "@/lib/physics-utils/collisions/Particle";
 import Slider from "@/components/slider/Slider";
-import {scalarOptions} from "yaml";
-import Str = scalarOptions.Str;
 
 const DynamicCollisionCanvas = dynamic(
     () => import('../../../components/collisions/CollisionCanvas'),
@@ -15,30 +13,31 @@ function CollisionsPage() {
 
     type ParticleProperty = 'positionX' | 'positionY' | 'velocity' | 'velocityAngle' | 'mass' | 'radius';
 
+
     const canvasHeight = 400;
 
-    const canvasWidth = 300;
+    const canvasWidth = 400;
 
     let particle1: Particle = new Particle(
         1,
         100,
-        150,
-        3,
+        100,
+        0,
         0,
         10,
         10,
-        '#ef4444'
+        'red'
     );
 
     let particle2: Particle = new Particle(
         2,
         200,
-        150,
-        3,
-        180,
+        200,
+        0,
+        0,
         10,
         10,
-        '#0284c7'
+        'blue'
     );
 
 
@@ -57,30 +56,6 @@ function CollisionsPage() {
 
             updatedParticle[property as ParticleProperty] = value;
 
-            if (property === 'positionX') {
-                value = Math.max(value, updatedParticle.radius);
-                value = Math.min(value, canvasWidth - updatedParticle.radius);
-            }
-            if (property === 'positionY') {
-                value = Math.max(value, updatedParticle.radius);
-                value = Math.min(value, canvasHeight - updatedParticle.radius);
-            }
-
-            if (property === 'radius') {
-                if (updatedParticle.positionX + updatedParticle.radius > canvasWidth) {
-                    updatedParticle.positionX = canvasWidth - updatedParticle.radius;
-                }
-                if (updatedParticle.positionX - updatedParticle.radius < 0) {
-                    updatedParticle.positionX = updatedParticle.radius;
-                }
-                if (updatedParticle.positionY + updatedParticle.radius > canvasHeight) {
-                    updatedParticle.positionY = canvasHeight - updatedParticle.radius;
-                }
-                if (updatedParticle.positionY - updatedParticle.radius < 0) {
-                    updatedParticle.positionY = updatedParticle.radius;
-                }
-            }
-
             return {
                 ...prevParameters,
                 [id === 1 ? 'particle1' : 'particle2']: updatedParticle,
@@ -89,25 +64,25 @@ function CollisionsPage() {
     };
 
 
-    const extractIdAndProperty = (type: string) => {
+    const extractIdAndProperty = (type : string) => {
         const [idString, property] = type.split('.');
         const id = parseInt(idString.slice(-1));
         return {id, property};
     };
 
 
-    const renderSliders = (id: number, particle: Particle, name: string) => {
+    const renderSliders = (id : number, particle : Particle) => {
 
         return (
             <div key={`particle-${id}`} className="flex flex-col bg-gray-100 shadow-md p-2 rounded-xl ">
-                <h1 className="text-xl">Particle {id} - {name}</h1>
+                <h1 className="text-xl">Particle {id}</h1>
                 <div className={"flex flex-row gap-3"}>
                     <div className="flex flex-col  bg-white  shadow-md p-2 rounded-xl mt-2">
                         <h1 className="text-xl">Position</h1>
                         <Slider
                             label="X"
-                            min={particle.radius}
-                            max={canvasWidth - particle.radius}
+                            min={0}
+                            max={canvasWidth}
                             step={1}
                             value={particle.positionX}
                             type={`particle${id}.positionX`}
@@ -116,8 +91,8 @@ function CollisionsPage() {
                         />
                         <Slider
                             label="Y"
-                            min={particle.radius}
-                            max={canvasHeight - particle.radius}
+                            min={0}
+                            max={canvasHeight}
                             step={1}
                             value={particle.positionY}
                             type={`particle${id}.positionY`}
@@ -129,7 +104,7 @@ function CollisionsPage() {
                     <div className="flex flex-col bg-white shadow-md p-2 rounded-xl mt-2">
                         <h1 className="text-xl">Velocity</h1>
                         <Slider
-                            label="Magnitude (px/s)"
+                            label="Magnitude"
                             min={0}
                             max={10}
                             step={1}
@@ -139,9 +114,9 @@ function CollisionsPage() {
                             onRangeChange={handleTextInputChange}
                         />
                         <Slider
-                            label="Angle (degrees)"
-                            min={0}
-                            max={360}
+                            label="Angle"
+                            min={-180}
+                            max={180}
                             step={1}
                             value={particle.velocityAngle}
                             type={`particle${id}.velocityAngle`}
@@ -153,7 +128,7 @@ function CollisionsPage() {
                     <div className="flex flex-col bg-white shadow-md p-2 rounded-xl mt-2">
                         <h1 className="text-xl">Structure</h1>
                         <Slider
-                            label="Mass (kg)"
+                            label="Mass"
                             min={1}
                             max={10}
                             step={1}
@@ -163,7 +138,7 @@ function CollisionsPage() {
                             onRangeChange={handleTextInputChange}
                         />
                         <Slider
-                            label="Radius (px)"
+                            label="Radius"
                             min={1}
                             max={50}
                             step={1}
@@ -192,16 +167,16 @@ function CollisionsPage() {
             <div className={"flex flex-row gap-4"}>
 
 
-                <div className={"flex flex-col justify-between gap-2"}>
-                    {renderSliders(1, collisionParameters.particle1, "Red")}
-                    {renderSliders(2, collisionParameters.particle2, "Blue")}
+                <div className={"flex flex-col justify-between"}>
+                    {renderSliders(1, collisionParameters.particle1)}
+                    {renderSliders(2, collisionParameters.particle2)}
                 </div>
 
                 <div className={"flex flex-col"}>
                     <DynamicCollisionCanvas canvasHeight={canvasHeight} canvasWidth={canvasWidth}
                                             collisionParameters={collisionParameters}/>
-                </div>
 
+                </div>
 
             </div>
         </div>
