@@ -1,4 +1,4 @@
-import {Particle} from "@/lib/physics-utils/collisions/Particle";
+import {Particle} from "@/lib/physics-utils/Particle";
 
 export interface CollisionResult {
 

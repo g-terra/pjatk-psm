@@ -6,13 +6,9 @@ import {Circle, Line} from "react-konva";
 interface Props {
     particle: Particle;
     showArrow: boolean;
-
-    canvasHeight: number;
-
-    canvasWidth: number;
 }
 
-const Arrow = (particle: Particle , canvasHeight: number) => {
+const Arrow = (particle: Particle) => {
     const arrowLength = 10 * particle.velocity; // Changed from 1.5 * particle.radius
     const arrowHeadSize = 5;
     const particleVelocity = polarToCartesian(particle.velocity, particle.velocityAngle);
@@ -26,9 +22,9 @@ const Arrow = (particle: Particle , canvasHeight: number) => {
             <Line
                 points={[
                     particle.positionX,
-                    canvasHeight - particle.positionY,
+                    particle.positionY,
                     arrowEndPointX,
-                    canvasHeight - arrowEndPointY,
+                    arrowEndPointY,
                 ]}
                 stroke={color}
                 strokeWidth={2}
@@ -36,11 +32,11 @@ const Arrow = (particle: Particle , canvasHeight: number) => {
             <Line
                 points={[
                     arrowEndPointX - arrowHeadSize * Math.cos(arrowHeadAngle - Math.PI / 6),
-                    canvasHeight- (arrowEndPointY - arrowHeadSize * Math.sin(arrowHeadAngle - Math.PI / 6)),
+                    arrowEndPointY - arrowHeadSize * Math.sin(arrowHeadAngle - Math.PI / 6),
                     arrowEndPointX,
-                    canvasHeight- arrowEndPointY,
+                    arrowEndPointY,
                     arrowEndPointX - arrowHeadSize * Math.cos(arrowHeadAngle + Math.PI / 6),
-                    canvasHeight-(arrowEndPointY - arrowHeadSize * Math.sin(arrowHeadAngle + Math.PI / 6))
+                    arrowEndPointY - arrowHeadSize * Math.sin(arrowHeadAngle + Math.PI / 6),
                 ]}
                 stroke={color}
                 strokeWidth={2}
@@ -50,16 +46,16 @@ const Arrow = (particle: Particle , canvasHeight: number) => {
 };
 
 
-const ParticleView: FC<Props> = ({particle, canvasHeight , canvasWidth, showArrow = false}) => {
+const ParticleView: FC<Props> = ({particle, showArrow = false}) => {
     return (
         <>
             <Circle
                 x={particle.positionX}
-                y={canvasHeight- particle.positionY}
+                y={particle.positionY}
                 radius={particle.radius}
                 fill={particle.color}
             />
-            {showArrow && Arrow(particle, canvasHeight)}
+            {showArrow && Arrow(particle)}
         </>
     );
 }
