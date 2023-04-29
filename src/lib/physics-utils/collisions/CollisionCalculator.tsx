@@ -1,7 +1,8 @@
-import {Particle} from "@/lib/physics-utils/collisions/Particle";
+import {Particle} from "@/lib/physics-utils/Particle";
 import DistanceCalculator from "@/lib/math-utils/cartesian-helper/DistanceCalculator";
 import {CollisionResult} from "@/lib/physics-utils/collisions/CollisionResult";
 import {cartesianToPolar, polarToCartesian} from "@/lib/math-utils/cartesian-helper/CoordinateConverter";
+import {normalizeAngle} from "@/lib/math-utils/cartesian-helper/AngleTools";
 
 export const checkCollision = (particle1: Particle, particle2: Particle): boolean => {
 
@@ -19,6 +20,16 @@ export const checkCollision = (particle1: Particle, particle2: Particle): boolea
 }
 
 export const collide = (particle1: Particle, particle2: Particle): CollisionResult => {
+
+    const hasCollision = checkCollision(particle1, particle2);
+
+    if (!hasCollision) {
+        return {
+            particle1PostCollision: particle1,
+            particle2PostCollision: particle2
+        }
+    }
+
     // Calculate the collision angle
     const angle = Math.atan2(particle2.positionY - particle1.positionY, particle2.positionX - particle1.positionX);
 
@@ -67,3 +78,41 @@ export const collide = (particle1: Particle, particle2: Particle): CollisionResu
     }
 };
 
+export const checkBoxCollision = (particle: Particle, width: number, height: number) => {
+
+    const leftCollision = particle.positionX - particle.radius <= 0;
+    const rightCollision = particle.positionX + particle.radius >= width;
+    const topCollision = (particle.positionY + particle.radius) >= height;
+    const bottomCollision = particle.positionY - particle.radius <= 0;
+
+    return {
+        leftCollision,
+        rightCollision,
+        topCollision,
+        bottomCollision
+    }
+}
+
+export const collideWithBox = (particle: Particle, width: number, height: number): Particle => {
+
+    const {leftCollision, rightCollision, topCollision, bottomCollision} = checkBoxCollision(particle, width, height);
+
+    let angle = particle.velocityAngle;
+
+    if (leftCollision || rightCollision) {
+        angle = normalizeAngle(180 - angle);
+    }
+
+    if (topCollision || bottomCollision) {
+        angle = normalizeAngle(360 - angle);
+    }
+
+    return {
+        ...particle,
+        velocityAngle: angle
+    };
+
+
+
+
+}
