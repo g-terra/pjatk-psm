@@ -1,9 +1,6 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
 import {Layer, Stage} from 'react-konva';
-import {
-    collide,
-    collideWithBox
-} from "@/lib/physics-utils/collisions/CollisionCalculator";
+import {collide, collideWithBox, CollisionLogEntry} from "@/lib/physics-utils/collisions/CollisionCalculator";
 import {Particle} from "@/lib/physics-utils/Particle";
 import Motion from "@/lib/physics-utils/Motion/Motion";
 import CanvasGrid from "@/components/collisions/CanvasGrid";
@@ -16,30 +13,38 @@ export interface CollisionParameters {
     particle2: Particle;
 }
 
-interface Props {
+export interface Props {
     canvasHeight: number;
     canvasWidth: number;
     collisionParameters: CollisionParameters;
+
+    onUpdate:(collisionLogEntry:CollisionLogEntry)=>void;
+
+    onReset:()=>void;
 }
 
-function handleCanvasCollision(particles: Particle[], canvasWidth: number, canvasHeight: number) {
+
+
+function handleCanvasCollision(particles: Particle[], canvasWidth: number, canvasHeight: number, onCollision: (collisionLogEntry:CollisionLogEntry) => void) {
+
     return particles.map((particle) => {
-            return collideWithBox(particle, canvasWidth, canvasHeight);
+            return collideWithBox(particle, canvasWidth, canvasHeight, onCollision);
         }
-    );
+    )
 }
 
-function handleParticleCollision(particles: Particle[]) {
-    const collisionResult = collide(particles[0], particles[1]);
+function handleParticleCollision(particles: Particle[], onCollision: (collisionLogEntry:CollisionLogEntry) => void) {
+    const collisionResult = collide(particles[0], particles[1], onCollision);
+
     return [
         collisionResult.particle1PostCollision,
         collisionResult.particle2PostCollision
     ]
 }
 
-function runCollision(updatedParticles: { positionY: number; velocityAngle: number; color: string; mass: number; id: number; velocity: number; radius: number; positionX: number }[], canvasWidth: number, canvasHeight: number) {
-    updatedParticles = handleCanvasCollision(updatedParticles, canvasWidth, canvasHeight);
-    return handleParticleCollision(updatedParticles);
+function runCollision(updatedParticles: Particle[], canvasWidth: number, canvasHeight: number, logCollision: (collision: CollisionLogEntry) => void) {
+    updatedParticles = handleCanvasCollision(updatedParticles, canvasWidth, canvasHeight, logCollision);
+    return handleParticleCollision(updatedParticles, logCollision);
 }
 
 function updateParticlesPositioning(particles: Particle[]) {
@@ -54,15 +59,19 @@ function updateParticlesPositioning(particles: Particle[]) {
     );
 }
 
-const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParameters}) => {
+const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParameters, onUpdate , onReset}) => {
 
     const [particles, setParticles] = useState<Particle[]>([collisionParameters.particle1, collisionParameters.particle2]);
     const [isPlaying, setIsPlaying] = useState(false);
     const [showArrow, setShowArrow] = useState(true);
 
+    const frameRate = 120;
+
+
     const handleReset = useCallback(() => {
         setParticles([collisionParameters.particle1, collisionParameters.particle2]);
         setIsPlaying(false);
+        onReset();
     }, [collisionParameters]);
 
 
@@ -81,11 +90,13 @@ const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParamet
 
                 let updatedParticles = updateParticlesPositioning(particles);
 
-                updatedParticles = runCollision(updatedParticles, canvasWidth, canvasHeight);
+                updatedParticles = runCollision(updatedParticles, canvasWidth, canvasHeight, (collision) => {
+                    onUpdate(collision);
+                });
 
                 setParticles(updatedParticles);
 
-            }, 1000 / 60);
+            }, 1000 / frameRate);
             return () => clearInterval(interval);
         }
     }, [particles, isPlaying, canvasWidth, canvasHeight]);
@@ -100,11 +111,13 @@ const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParamet
                             width: canvasWidth,
                         }}
                     >
-                        <Stage width={canvasWidth} height={canvasHeight} >
+                        <Stage width={canvasWidth} height={canvasHeight}>
                             <Layer>
                                 <CanvasGrid width={canvasWidth} height={canvasHeight} gridSize={25}></CanvasGrid>
-                                <ParticleView particle={particles[0]} showArrow={showArrow} canvasWidth={ canvasWidth} canvasHeight={canvasHeight}></ParticleView>
-                                <ParticleView particle={particles[1]} showArrow={showArrow} canvasWidth={ canvasWidth} canvasHeight={canvasHeight}></ParticleView>
+                                <ParticleView particle={particles[0]} showArrow={showArrow} canvasWidth={canvasWidth}
+                                              canvasHeight={canvasHeight}></ParticleView>
+                                <ParticleView particle={particles[1]} showArrow={showArrow} canvasWidth={canvasWidth}
+                                              canvasHeight={canvasHeight}></ParticleView>
                             </Layer>
                         </Stage>
                     </div>
@@ -136,7 +149,6 @@ const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParamet
                 <ParticleStatus particle={particles[0]}/>
                 <ParticleStatus particle={particles[1]}/>
             </div>
-
         </div>
     );
 };

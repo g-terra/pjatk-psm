@@ -1,15 +1,18 @@
 import dynamic from 'next/dynamic';
-import React, {useEffect} from "react";
+import React from "react";
+import { Props as CollisionCanvasProps } from '../../../components/collisions/CollisionCanvas';
 import {CollisionParameters} from "@/components/collisions/CollisionCanvas";
 import {Particle} from "@/lib/physics-utils/Particle";
 import Slider from "@/components/slider/Slider";
-import {scalarOptions} from "yaml";
-import Str = scalarOptions.Str;
+import {CollisionLogEntry} from "@/lib/physics-utils/collisions/CollisionCalculator";
+import CollisionLogViewer from "@/components/collisions/log-viewer/CollisionLogViewer";
 
-const DynamicCollisionCanvas = dynamic(
-    () => import('../../../components/collisions/CollisionCanvas'),
-    {ssr: false}
-);
+
+
+const DynamicCollisionCanvas = dynamic<CollisionCanvasProps>(() => import('../../../components/collisions/CollisionCanvas'), {
+    ssr: false,
+});
+
 
 function CollisionsPage() {
 
@@ -47,6 +50,16 @@ function CollisionsPage() {
             particle2: particle2
         }
     );
+
+    const [collisionLog, setCollisionLog] = React.useState<CollisionLogEntry[]>([]);
+
+    const handleReset = () => {
+        setCollisionLog([]);
+    }
+
+    const handleCollision = (collision: CollisionLogEntry) => {
+        setCollisionLog((prevLog) => [...prevLog, collision]);
+    }
 
     const handleTextInputChange = (type: string, value: number) => {
         const {id, property} = extractIdAndProperty(type);
@@ -164,7 +177,7 @@ function CollisionsPage() {
                         />
                         <Slider
                             label="Radius (px)"
-                            min={1}
+                            min={0}
                             max={50}
                             step={1}
                             value={particle.radius}
@@ -198,11 +211,20 @@ function CollisionsPage() {
                 </div>
 
                 <div className={"flex flex-col"}>
-                    <DynamicCollisionCanvas canvasHeight={canvasHeight} canvasWidth={canvasWidth}
-                                            collisionParameters={collisionParameters}/>
+                    <DynamicCollisionCanvas
+                        canvasHeight={canvasHeight}
+                        canvasWidth={canvasWidth}
+                        collisionParameters={collisionParameters}
+                        onUpdate={handleCollision}
+                        onReset={handleReset}
+                    />
                 </div>
 
 
+            </div>
+
+            <div className={"flex flex-col gap-2"}>
+                <CollisionLogViewer collisionLog={collisionLog} />
             </div>
         </div>
     );
