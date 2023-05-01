@@ -1,16 +1,14 @@
 import React, {FC, useCallback, useEffect, useState} from 'react';
-import {Circle, Layer, Line, Rect, Stage, Text} from 'react-konva';
+import {Layer, Stage} from 'react-konva';
 import {
     collide,
     collideWithBox
 } from "@/lib/physics-utils/collisions/CollisionCalculator";
 import {Particle} from "@/lib/physics-utils/Particle";
-import {cartesianToPolar, polarToCartesian} from "@/lib/math-utils/cartesian-helper/CoordinateConverter";
 import Motion from "@/lib/physics-utils/Motion/Motion";
 import CanvasGrid from "@/components/collisions/CanvasGrid";
 import ParticleView from "@/components/collisions/ParticleView";
 import ParticleStatus from "@/components/collisions/PaticleStatus";
-import particleView from "@/components/collisions/ParticleView";
 
 
 export interface CollisionParameters {
@@ -102,11 +100,11 @@ const CollisionCanvas: FC<Props> = ({canvasHeight, canvasWidth, collisionParamet
                             width: canvasWidth,
                         }}
                     >
-                        <Stage width={canvasWidth} height={canvasHeight}>
+                        <Stage width={canvasWidth} height={canvasHeight} >
                             <Layer>
                                 <CanvasGrid width={canvasWidth} height={canvasHeight} gridSize={25}></CanvasGrid>
-                                <ParticleView particle={particles[0]} showArrow={showArrow}></ParticleView>
-                                <ParticleView particle={particles[1]} showArrow={showArrow}></ParticleView>
+                                <ParticleView particle={particles[0]} showArrow={showArrow} canvasWidth={ canvasWidth} canvasHeight={canvasHeight}></ParticleView>
+                                <ParticleView particle={particles[1]} showArrow={showArrow} canvasWidth={ canvasWidth} canvasHeight={canvasHeight}></ParticleView>
                             </Layer>
                         </Stage>
                     </div>

@@ -79,7 +79,6 @@ describe("Physics Utils: Collisions", () => {
             const height = 4;
             const result = collideWithBox(particle, width, height);
             expect(result.velocityAngle).toBeCloseTo(45);
-
         });
     });
 

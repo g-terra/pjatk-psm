@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import React from "react";
+import React, {useEffect} from "react";
 import {CollisionParameters} from "@/components/collisions/CollisionCanvas";
 import {Particle} from "@/lib/physics-utils/Particle";
 import Slider from "@/components/slider/Slider";
@@ -200,7 +200,6 @@ function CollisionsPage() {
                 <div className={"flex flex-col"}>
                     <DynamicCollisionCanvas canvasHeight={canvasHeight} canvasWidth={canvasWidth}
                                             collisionParameters={collisionParameters}/>
-
                 </div>
 
 
