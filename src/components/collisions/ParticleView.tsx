@@ -12,7 +12,7 @@ interface Props {
     canvasWidth: number;
 }
 
-const Arrow = (particle: Particle , canvasHeight) => {
+const Arrow = (particle: Particle , canvasHeight: number) => {
     const arrowLength = 10 * particle.velocity; // Changed from 1.5 * particle.radius
     const arrowHeadSize = 5;
     const particleVelocity = polarToCartesian(particle.velocity, particle.velocityAngle);
