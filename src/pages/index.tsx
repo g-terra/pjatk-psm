@@ -12,9 +12,9 @@ export default function Home() {
                         Non Linear Equation Roots
                     </button>
                 </Link>
-                <Link href="" passHref>
+                <Link href="/tasks/collisions">
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        TODO
+                        Collisions
                     </button>
                 </Link>
                 <Link href="" passHref>
