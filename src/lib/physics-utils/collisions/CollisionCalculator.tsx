@@ -5,7 +5,16 @@ import {cartesianToPolar, polarToCartesian} from "@/lib/math-utils/cartesian-hel
 import AngleTools, {normalizeAngle} from "@/lib/math-utils/cartesian-helper/AngleTools";
 import SingleDimensionCollision from "@/lib/physics-utils/collisions/single-dimensional/SingleDimensionCollision";
 import TwoDimensionalCollision from "@/lib/physics-utils/collisions/two-dimensional/TwoDimensionalCollision";
-import VectorTools from "@/lib/math-utils/cartesian-helper/VectorTools";
+import VectorTools from "@/lib/math-utils/cartesian-helper/VectorTools"
+
+export interface CollisionLogEntry {
+    type: "particle-wall" | "particle-particle";
+    particle1BeforeCollision: Particle;
+    particle2BeforeCollision: Particle;
+    particle1AfterCollision: Particle;
+    particle2AfterCollision: Particle;
+
+}
 
 export const checkCollision = (particle1: Particle, particle2: Particle): boolean => {
 
@@ -23,7 +32,8 @@ export const checkCollision = (particle1: Particle, particle2: Particle): boolea
 }
 
 
-export const collide = (particle1: Particle, particle2: Particle): CollisionResult => {
+export const collide = (particle1: Particle, particle2: Particle, onCollision: (logEntry: CollisionLogEntry) => void = () => {
+}): CollisionResult => {
 
     const hasCollision = checkCollision(particle1, particle2);
 
@@ -67,7 +77,7 @@ export const collide = (particle1: Particle, particle2: Particle): CollisionResu
     const newVelocity1 = cartesianToPolar(finalVelocity1.x, finalVelocity1.y);
     const newVelocity2 = cartesianToPolar(finalVelocity2.x, finalVelocity2.y);
 
-    return {
+    const result = {
         particle1PostCollision: {
             ...particle1,
             velocity: newVelocity1.magnitude,
@@ -79,6 +89,17 @@ export const collide = (particle1: Particle, particle2: Particle): CollisionResu
             velocityAngle: newVelocity2.angle
         }
     }
+
+
+    onCollision({
+        type: 'particle-particle',
+        particle1BeforeCollision: particle1,
+        particle2BeforeCollision: particle2,
+        particle1AfterCollision: result.particle1PostCollision,
+        particle2AfterCollision: result.particle2PostCollision
+    });
+
+    return result
 };
 
 export const checkBoxCollision = (particle: Particle, width: number, height: number) => {
@@ -96,23 +117,53 @@ export const checkBoxCollision = (particle: Particle, width: number, height: num
     }
 }
 
-export const collideWithBox = (particle: Particle, width: number, height: number): Particle => {
+export const collideWithBox = (particle: Particle, width: number, height: number, onCollision: (logEntry: CollisionLogEntry) => void): Particle => {
 
     const {leftCollision, rightCollision, topCollision, bottomCollision} = checkBoxCollision(particle, width, height);
 
-    let angle = particle.velocityAngle;
+    let result = {...particle}
 
-    if (leftCollision || rightCollision) {
-        angle = normalizeAngle(180 - angle);
+    if (!leftCollision && !rightCollision && !topCollision && !bottomCollision) return result;
+
+    if (leftCollision) {
+        result = {
+            ...result,
+            velocityAngle: normalizeAngle(180 - result.velocityAngle)
+        }
     }
 
-    if (topCollision || bottomCollision) {
-        angle = normalizeAngle(360 - angle);
+    if (rightCollision) {
+        result = {
+            ...result,
+            velocityAngle: normalizeAngle(180 - result.velocityAngle)
+        }
     }
+
+    if (topCollision) {
+        result = {
+            ...result,
+            velocityAngle: normalizeAngle(360 - result.velocityAngle)
+        }
+    }
+
+    if (bottomCollision) {
+        result = {
+            ...result,
+            velocityAngle: normalizeAngle(360 - result.velocityAngle)
+        }
+    }
+
+
+    onCollision({
+        type: 'particle-wall',
+        particle1BeforeCollision: particle,
+        particle2BeforeCollision: {} as Particle,
+        particle1AfterCollision: result,
+        particle2AfterCollision: {} as Particle
+    });
 
     return {
-        ...particle,
-        velocityAngle: angle
+        ...result,
     };
 
 }
