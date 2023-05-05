@@ -2,7 +2,7 @@ import MatrixTools from "@/lib/math-utils/matrix-helper/MatrixTools";
 
 const RandomWalk = {
 
-    generateStateMatrix(numSteps: number, left: number, right: number): number[][] {
+    generateStateMatrix(numSteps: number, leftProbability: number): number[][] {
 
         const stateMatrix = [];
 
@@ -14,9 +14,9 @@ const RandomWalk = {
                 if (rowIndex === columnIndex) {
                     row.push(0);
                 } else if (columnIndex - 1 === rowIndex) {
-                    row.push(right);
+                    row.push(leftProbability);
                 } else if (columnIndex + 1 === rowIndex) {
-                    row.push(left);
+                    row.push(1 - leftProbability);
                 } else {
                     row.push(0);
                 }
@@ -26,11 +26,11 @@ const RandomWalk = {
 
         return stateMatrix;
 
-
     },
-    getProbabilitiesForNthStep(numSteps: number, left: number, right: number) {
+    getProbabilitiesForNthStep(numSteps: number, leftProbability: number) {
 
-        const stateMatrix = this.generateStateMatrix(numSteps, left, right);
+
+        const stateMatrix = this.generateStateMatrix(numSteps, leftProbability);
 
         let initialState = [];
 
@@ -49,8 +49,11 @@ const RandomWalk = {
 
     },
 
-    getProbabilityForPositionXatStepNth(numSteps: number, left: number, right: number, number: number) {
-        const probabilities = this.getProbabilitiesForNthStep(numSteps, left, right);
+    getProbabilityForPositionXatStepNth(numSteps: number, leftProbability:number, number: number) {
+
+
+        const probabilities = this.getProbabilitiesForNthStep(numSteps, leftProbability);
+
         return probabilities[number + numSteps][0];
 
     }
