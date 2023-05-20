@@ -1,16 +1,18 @@
-import Equation from "@/lib/math-utils/equation-solver/Equation";
+import PolynomialFunction from "@/lib/math-utils/math-functions/PolynomialFunction";
 
 class Parameters {
-    public readonly equation: Equation;
+    public readonly equation: string;
     public readonly lowerBound: number;
     public readonly upperBound: number;
     public readonly precision: number;
+    public readonly iterationLimit: number;
 
-    constructor(equation: Equation, lowerBound: number, upperBound: number, acceptableError: number) {
+    constructor(equation: string, lowerBound: number, upperBound: number, acceptableError: number, iterationLimit : number) {
         this.lowerBound = lowerBound;
         this.equation = equation;
         this.upperBound = upperBound;
         this.precision = acceptableError;
+        this.iterationLimit = iterationLimit;
     }
 
 }

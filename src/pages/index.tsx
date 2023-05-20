@@ -22,9 +22,9 @@ export default function Home() {
                         Random Walk
                     </button>
                 </Link>
-                <Link href="" passHref>
+                <Link href="/tasks/integrals" passHref>
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        TODO
+                        Integrals
                     </button>
                 </Link>
                 <Link href="" passHref>

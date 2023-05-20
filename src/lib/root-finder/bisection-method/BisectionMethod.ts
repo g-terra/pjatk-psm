@@ -1,41 +1,45 @@
 import Parameters from "@/lib/root-finder/Parameters";
-import EquationSolver from "@/lib/math-utils/equation-solver/EquationSolver";
+import EquationSolver from "@/lib/math-utils/math-functions/MathFunctionSolver";
 import Result from "@/lib/root-finder/Result";
 
 const methodName = "Bisection Method";
 const resolve = (parameters: Parameters): Result => {
 
-    let lowerBound: number = parameters.lowerBound;
-    let upperBound: number = parameters.upperBound;
-    let midPoint: number = (lowerBound + upperBound) / 2;
-    let iterations: number = 1;
+    console.log("parameters:", parameters)
 
-    if (
-        Math.sign(EquationSolver.solve(parameters.equation, lowerBound)) ==
-        Math.sign(EquationSolver.solve(parameters.equation, upperBound))
-    ) {
-        return Result.fromError(methodName, "Invalid bounds. The function result (Y) must have different signs for the given bounds.");
-    }
+    let A: number = parameters.lowerBound;
+    let C: number = parameters.upperBound;
+    let x
+    let iterations = 1
 
+    if (EquationSolver.solve(parameters.equation, A) == 0) return Result.fromSuccess(A, iterations, methodName);
+    if (EquationSolver.solve(parameters.equation, C) == 0) return Result.fromSuccess(C, iterations, methodName);
 
-    while (Math.abs(lowerBound - upperBound) > parameters.precision) {
-        console.log(`Iteration ${iterations}:`)
-        const yLowerBound = EquationSolver.solve(parameters.equation, lowerBound);
-        const yMidPoint = EquationSolver.solve(parameters.equation, midPoint);
+    do {
+        x = (A + C) / 2;
+        let fB = EquationSolver.solve(parameters.equation, x);
+        let fA = EquationSolver.solve(parameters.equation, A);
 
-        if (yLowerBound * yMidPoint <= 0) {
-            upperBound = midPoint;
+        if (fA * fB <= 0) {
+            C = x;
         } else {
-            lowerBound = midPoint;
+            A = x;
         }
 
-        midPoint = (lowerBound + upperBound) / 2;
-
         iterations++;
-    }
 
-    return Result.fromSuccess(midPoint, iterations, methodName);
+    } while (Math.abs(A - C) > parameters.precision && iterations < parameters.iterationLimit)
+
+
+
+    if (isNaN(x)) {
+        return Result.fromError("Bisection method", "Bisection Method failed to converge." +
+            " Try changing the bounds or the precision. Reasons for failure: 1) There where more iterations than the iteration limit. 2) The function does not fully cross the x axis.")
+    }
+    return Result.fromSuccess(x, iterations, methodName);
+
 }
+
 
 const BisectionMethod = {
     resolve

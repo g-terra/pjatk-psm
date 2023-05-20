@@ -5,10 +5,15 @@ import Parameters from "@/components/random-walk/parameter-form/Parameters";
 import ParameterForm from "@/components/random-walk/parameter-form/ParameterForm";
 import ResultCard from "@/components/random-walk/ResultCard";
 
+
+interface Result {
+    probability: number;
+    error: string;
+}
 export default function RandomWalk() {
 
     //state to keep result in a list
-    const [result, setResult] = React.useState<>({
+    const [result, setResult] = React.useState<Result>({
         "probability": 0,
         "error": ""
     });

@@ -1,5 +1,5 @@
 import {describe, expect, test} from "@jest/globals";
-import Equation from "@/lib/math-utils/equation-solver/Equation";
+import PolynomialFunction from "@/lib/math-utils/math-functions/PolynomialFunction";
 import SecantMethod from "@/lib/root-finder/secant-method/SecantMethod";
 import Parameters from "@/lib/root-finder/Parameters";
 
@@ -10,14 +10,14 @@ describe("Secant method test", () => {
         const constants = [1, -1, -1];
         const powers = [3, 1, 0];
 
-        const equation = new Equation(constants, powers);
+        const equation = new PolynomialFunction(constants, powers);
 
         const x0 = 1;
         const x1 = 2;
         const acceptableError = 0.00001;
 
         // Act
-        const result = SecantMethod.resolve(new Parameters(equation, x0, x1, acceptableError));
+        const result = SecantMethod.resolve(new Parameters(equation.toDisplayString(), x0, x1, acceptableError,1000));
 
         // Assert
         expect(result.root).toBeCloseTo(1.324717, 5);
@@ -31,14 +31,14 @@ describe("Secant method test", () => {
         const constants = [1];
         const powers = [2];
 
-        const equation = new Equation(constants, powers);
+        const equation = new PolynomialFunction(constants, powers);
 
         const lowerBound = 0;
         const upperBound = 1;
         const acceptableError = 0.00001;
 
         // Act
-        const result = SecantMethod.resolve(new Parameters(equation, lowerBound, upperBound, acceptableError));
+        const result = SecantMethod.resolve(new Parameters(equation.toDisplayString(), lowerBound, upperBound, acceptableError,1000));
 
         // Assert
         expect(result.root).toBeCloseTo(0,5)
