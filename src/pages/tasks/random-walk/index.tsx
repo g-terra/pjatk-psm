@@ -10,6 +10,7 @@ interface Result {
     probability: number;
     error: string;
 }
+
 export default function RandomWalk() {
 
     //state to keep result in a list
