@@ -28,7 +28,7 @@ const CollisionLogViewer: FC<Props> = ({collisionLog}) => {
 
         {collisionLog.length === 0 && <p className="text-lg">No collisions yet.</p>}
 
-        <div className="overflow-auto max-h-[400px]">
+        <div className="h-[400px] overflow-auto">
             {collisionLog.filter(c => c.type.startsWith(filter)).map((collision, index) => {
                 return (
                     <CollisionLogView entry={collision} key={index} count={index + 1}></CollisionLogView>

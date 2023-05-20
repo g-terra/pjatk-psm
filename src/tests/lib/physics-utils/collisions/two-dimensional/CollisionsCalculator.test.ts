@@ -52,7 +52,7 @@ describe("Physics Utils: Collisions", () => {
             const width = 4;
             const height = 4;
 
-            const result = collideWithBox(particle, width, height);
+            const result = collideWithBox(particle, width, height,() => {});
             expect(result.velocityAngle).toBeCloseTo(270);
         });
 
@@ -61,7 +61,7 @@ describe("Physics Utils: Collisions", () => {
             const width = 4;
             const height = 4;
 
-            const result = collideWithBox(particle, width, height);
+            const result = collideWithBox(particle, width, height,() => {});
             expect(result.velocityAngle).toBeCloseTo(180);
         });
 
@@ -69,7 +69,7 @@ describe("Physics Utils: Collisions", () => {
             const particle = new Particle(1, 2, 2, 1, 45, 1, 1, "red");
             const width = 4;
             const height = 4;
-            const result = collideWithBox(particle, width, height);
+            const result = collideWithBox(particle, width, height , () => {});
             expect(result).toEqual(particle);
         });
 
@@ -77,7 +77,7 @@ describe("Physics Utils: Collisions", () => {
             const particle = new Particle(1, 1, 3, 1, 225, 1, 1, "red");
             const width = 4;
             const height = 4;
-            const result = collideWithBox(particle, width, height);
+            const result = collideWithBox(particle, width, height,() => {});
             expect(result.velocityAngle).toBeCloseTo(45);
         });
     });

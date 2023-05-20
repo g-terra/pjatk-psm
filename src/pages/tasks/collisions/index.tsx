@@ -223,7 +223,7 @@ function CollisionsPage() {
 
             </div>
 
-            <div className={"flex flex-col gap-2"}>
+            <div className={"flex flex-col gap-2 "}>
                 <CollisionLogViewer collisionLog={collisionLog} />
             </div>
         </div>

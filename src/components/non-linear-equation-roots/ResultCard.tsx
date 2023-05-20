@@ -13,7 +13,7 @@ const ResultCard: FC<ResultCardProps> = ({ result }) => {
 
     return (
         <div
-            className={`p-6 rounded-lg shadow-md ${cardBgColor} ${textColor} h-full w-full overflow-y-auto min-h-[150px] max-w-full`}
+            className={`p-6 rounded-lg shadow-md ${cardBgColor} ${textColor} h-full w-full overflow-y-auto min-h-[150px] max-w-[250px]`}
         >
             {isError ? (
                 <div className="text-center">
@@ -23,13 +23,11 @@ const ResultCard: FC<ResultCardProps> = ({ result }) => {
             ) : (
                 <>
                     <h3 className="text-xl font-semibold ">{result.methodName}</h3>
-                    {/*a line to divide the two sections*/}
                     <hr className="my-4" />
-
                     <div className="flex flex-col justify-between mt-4 gap-3">
                         <div>
                             <p className="font-semibold">Root:</p>
-                            <p>{result.root?.toFixed(10)}</p>
+                            <p>{result.root?.toFixed(5)}</p>
                         </div>
                         <div>
                             <p className="font-semibold">Iterations:</p>
