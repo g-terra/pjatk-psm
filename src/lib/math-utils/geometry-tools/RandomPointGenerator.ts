@@ -1,5 +1,5 @@
-//generate a given amount of random points  withing a given area using pseudo-random number generator. point is number[][]
-//area is given by height and width parameters
+//generate a given amount of random points  withing a given monte-carlo using pseudo-random number generator. point is number[][]
+//monte-carlo is given by height and width parameters
 import uniform from "@stdlib/random-base-uniform";
 
 export function generateRandomPoints(amount: number, height: number, width: number): number[][] {
@@ -27,4 +27,9 @@ export function generateRandomPointsInRange(amount: number, heightRange: number[
         ]);
     }
     return points;
+}
+
+export function generateRandomPointsInsideBox(amount: number, box : number[][]){
+
+    return generateRandomPointsInRange(amount, [box[0][1], box[3][1]], [box[0][0], box[1][0]]);
 }

@@ -32,7 +32,7 @@ const BasePlotter: FC<Props> = ({functionOptions}) => {
         };
 
         if (!isLoaded) {
-            loadFunctionPlot().then(r => console.log(r));
+            loadFunctionPlot().then(r => {});
         }
     }, [isLoaded, functionOptions , isLibraryLoaded]);
 

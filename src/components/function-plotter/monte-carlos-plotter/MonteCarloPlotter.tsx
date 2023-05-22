@@ -12,7 +12,7 @@ async function loadFunctionPlot() {
     functionPlot = module.default;
 }
 
-loadFunctionPlot().then(r => console.log(r));
+loadFunctionPlot().then(r => {});
 
 type Props = {
     height?: number;
@@ -26,13 +26,14 @@ type Props = {
     xDomain?: [number, number];
 
     yDomain?: [number, number];
+    boundBox?: PlottableShape;
 };
-
 
 const MonteCarloPlotter: FC<Props> = (
     {
         shape,
         curve,
+        boundBox,
         locked = true,
         points,
         height = 400,
@@ -42,7 +43,7 @@ const MonteCarloPlotter: FC<Props> = (
     }) => {
 
     return <BasePlotter height={height} width={width}
-                        functionOptions={new FigurePlotterOptions(height, width,  xDomain, yDomain ,points, shape, curve, locked)} />;
+                        functionOptions={new FigurePlotterOptions(height, width,  xDomain, yDomain ,points, shape, curve ,boundBox, locked)} />;
 
 
 };
@@ -59,12 +60,12 @@ class FigurePlotterOptions extends BasePlotOptions {
         points: PlottablePoint[],
         figure?: PlottableShape,
         curve?: PlottableCurve,
+        boundBox?: PlottableShape,
         locked = true,
     ) {
 
         const data = []
 
-        console.log("figure", figure)
 
         if (figure) {
             data.push({
@@ -80,6 +81,15 @@ class FigurePlotterOptions extends BasePlotOptions {
                 fn: curve.curveFn,
                 graphType: 'polyline',
                 color: 'black',
+            })
+        }
+
+        if (boundBox) {
+            data.push({
+                points: boundBox.points,
+                fnType: 'points',
+                graphType: 'polyline',
+                color: 'purple',
             })
         }
 

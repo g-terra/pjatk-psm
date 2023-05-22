@@ -21,10 +21,10 @@ export class BasePlotOptions implements FunctionPlotOptions {
         this.data = data;
         this.grid = true;
         this.yAxis = {
-            domain: domains.x,
+            domain: domains.y,
         };
         this.xAxis = {
-            domain: domains.y,
+            domain: domains.x,
         };
         this.width = width;
         this.height = height;

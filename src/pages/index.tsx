@@ -27,7 +27,7 @@ export default function Home() {
                         Integrals
                     </button>
                 </Link>
-                <Link href="/tasks/area" passHref>
+                <Link href="/tasks/monte-carlo" passHref>
                     <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Monte Carlo area
                     </button>
