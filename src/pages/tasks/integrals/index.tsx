@@ -1,17 +1,13 @@
-import MultiFunctionPlotter from "@/components/function-plotter/MultiFunctionPlotter";
+import MultiFunctionPlotter from "@/components/function-plotter/multi-function-plotter/MultiFunctionPlotter";
 import RectangleMethod from "@/lib/math-utils/Integrals/RectangleMethod";
 import styles from "@/styles/forms.module.css";
-import React, {useEffect, useMemo, useState} from "react";
-import mathFunctionSolver from "@/lib/math-utils/math-functions/MathFunctionSolver";
+import React, {useEffect, useState} from "react";
 import MathFunctionSolver from "@/lib/math-utils/math-functions/MathFunctionSolver";
 import TrapezoidMethod from "@/lib/math-utils/Integrals/TrapezoidMethod";
 import {Result} from "@/lib/math-utils/Integrals/Result";
 import EquationDisplay from "@/components/equation-display/EquationDisplay";
 import SimpsonMethod from "@/lib/math-utils/Integrals/SimpsonMethod";
-import {PlottableFunction} from "@/components/function-plotter/PlottableFunction";
-
-
-
+import {PlottableFunction} from "@/components/function-plotter/multi-function-plotter/PlottableFunction";
 
 export default function Integrals() {
 
@@ -64,8 +60,6 @@ export default function Integrals() {
             },
             slices
         );
-
-        console.log(result)
 
         const newFunctions = [
             {

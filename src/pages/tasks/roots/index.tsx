@@ -2,14 +2,14 @@
 import React, {useEffect, useState} from 'react';
 import Parameters from "@/lib/root-finder/Parameters";
 import ResultCard from "@/components/non-linear-equation-roots/ResultCard";
-import MultiFunctionPlotter from "@/components/function-plotter/MultiFunctionPlotter";
+import MultiFunctionPlotter from "@/components/function-plotter/multi-function-plotter/MultiFunctionPlotter";
 import styles from "@/styles/forms.module.css";
 import MathFunctionSolver from "@/lib/math-utils/math-functions/MathFunctionSolver";
 import EquationDisplay from "@/components/equation-display/EquationDisplay";
 import BisectionMethod from "@/lib/root-finder/bisection-method/BisectionMethod";
 import SecantMethod from "@/lib/root-finder/secant-method/SecantMethod";
 import RegulaFalsiMethod from "@/lib/root-finder/regula-falsi-method/RegulaFalsiMethod";
-import {PlottableFunction} from "@/components/function-plotter/PlottableFunction";
+import {PlottableFunction} from "@/components/function-plotter/multi-function-plotter/PlottableFunction";
 import Result from "@/lib/root-finder/Result";
 
 export default function NonLinearEquationRoots() {

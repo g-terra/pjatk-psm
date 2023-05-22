@@ -1,5 +1,4 @@
-import exp from "constants";
-import {Point} from "@/lib/math-utils/cartesian-helper/Point";
+import {Point} from "@/lib/math-utils/cartesian-helper/model/Point";
 
 class PolynomialFunction {
     public readonly constants: number[];
