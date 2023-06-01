@@ -93,7 +93,7 @@ class FigurePlotterOptions extends BasePlotOptions {
             })
         }
 
-        const pointsByColor = points.reduce((group, point) => {
+        const pointsByColor = points.reduce((group:any, point:any) => {
             const {color} = point;
             group[color] = group[color] ?? [];
             group[color].push([point.x, point.y]);

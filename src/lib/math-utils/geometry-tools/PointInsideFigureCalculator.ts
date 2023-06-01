@@ -21,8 +21,7 @@ function pointIsInPoly(point: number[], polygon: number[][]): boolean {
         return false;
     }
 
-    let i = 0, j = polygon.length - 1;
-    for (i, j; i < polygon.length; j = i++) {
+    for (let i =0 , j =polygon.length - 1; i < polygon.length; j = i++) {
         if ((polygon[i][1] > point[1]) != (polygon[j][1] > point[1]) &&
             point[0] < (polygon[j][0] - polygon[i][0]) * (point[1] - polygon[i][1]) / (polygon[j][1] - polygon[i][1]) + polygon[i][0]) {
             isInside = !isInside;
