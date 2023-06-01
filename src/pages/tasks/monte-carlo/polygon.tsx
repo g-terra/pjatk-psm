@@ -9,7 +9,7 @@ import {
     generateRandomPointsInsideBox
 } from "@/lib/math-utils/geometry-tools/RandomPointGenerator";
 import {
-    isPointInsideRegularPolygon
+    isInsidePolygon
 } from "@/lib/math-utils/geometry-tools/PointInsideFigureCalculator";
 import calculateArea from "@/lib/monte-carlo/MonteCarlo";
 import {LOG2E} from "mathjs";
@@ -115,7 +115,9 @@ export default function Polygon() {
         const randomPoints = generateRandomPointsInsideBox(pointCount, boundBoxPoints)
         const samplingPoints = mapPointsToShape(randomPoints, polygonPoints)
 
-        const countByColor = {
+        const countByColor: {
+            [key: string]: number
+        } = {
             'red': 0,
             'green': 0
         }
@@ -158,7 +160,7 @@ export default function Polygon() {
 
     const mapPointsToShape = (randomPoints: number[][], shape: number[][]) => {
         return randomPoints.map(point => {
-            const isInside = isPointInsideRegularPolygon(point, shape)
+            const isInside = isInsidePolygon(point, shape)
             return {
                 x: point[0],
                 y: point[1],
@@ -174,7 +176,9 @@ export default function Polygon() {
             return <>   </>
         }
 
-        const distribution = {
+        const distribution: {
+            [key: string]: number
+        } = {
             'red': 0,
             'green': 0
         }
@@ -187,7 +191,7 @@ export default function Polygon() {
             <div className="flex flex-col justify-center items-center bg-white rounded-xl p-3">
                 <div className="flex flex-row justify-center items-center gap-3">
                     <div className="flex flex-col justify-center items-center">
-                        <h1 className="text-xl font-bold mb-2">Simulated Area : {area}</h1>
+                        <h1 className="text-xl font-bold mb-2">Simulated Area : {area.toFixed(4)}</h1>
                         <div className="flex flex-col justify-center items-center ">
                             <div className="flex flex-col justify-center items-center">
                                 <h1 className="text-xl font-bold mb-2">Hits : {distribution['green']}</h1>

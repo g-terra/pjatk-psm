@@ -23,9 +23,9 @@ type Props = {
 
     locked?: boolean;
 
-    xDomain?: [number, number];
+    xDomain?: number[];
 
-    yDomain?: [number, number];
+    yDomain?: number[];
     boundBox?: PlottableShape;
 };
 
@@ -55,8 +55,8 @@ class FigurePlotterOptions extends BasePlotOptions {
     constructor(
         height: number,
         width: number,
-        xDomain: [number, number],
-        yDomain: [number, number],
+        xDomain: number[],
+        yDomain: number[],
         points: PlottablePoint[],
         figure?: PlottableShape,
         curve?: PlottableCurve,
@@ -99,6 +99,12 @@ class FigurePlotterOptions extends BasePlotOptions {
             group[color].push([point.x, point.y]);
             return group;
         }, {});
+
+        // const pointsByColor = points.reduce<{ [key: string]: Array<{ x: number, y: number }> }>((group, point) => {
+        //     group[point.color] = group[point.color] ?? [];
+        //     group[point.color].push({x: point.x, y: point.y});
+        //     return group;
+        // }, {});
 
         Object.keys(pointsByColor).forEach((color) => {
             data.push({

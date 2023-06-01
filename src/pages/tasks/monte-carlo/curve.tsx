@@ -10,7 +10,7 @@ import {
 } from "@/lib/math-utils/geometry-tools/RandomPointGenerator";
 import {
     isPointBetweenCurveAnX,
-    isPointInsideRegularPolygon
+    isInsidePolygon
 } from "@/lib/math-utils/geometry-tools/PointInsideFigureCalculator";
 import calculateArea from "@/lib/monte-carlo/MonteCarlo";
 import MathFunctionSolver from "@/lib/math-utils/math-functions/MathFunctionSolver";
@@ -109,14 +109,15 @@ export default function Curve() {
         const randomPoints = generateRandomPointsInsideBox(pointCount, boundBoxPoints)
         const samplingPoints = mapPointsToCurve(randomPoints, plotCurve)
 
-        const countByColor = {
-            'red': 0,
-            'green': 0
-        }
+        let countByColor: { [color: string]: number } = { red: 0, green: 0 };
 
         samplingPoints.forEach(point => {
-            countByColor[point.color]++
-        })
+            if (countByColor.hasOwnProperty(point.color)) {
+                countByColor[point.color]++;
+            } else {
+                console.error(`Unexpected color: ${point.color}`);
+            }
+        });
 
         const boundingBoxArea = boundBoxWidth * boundBoxHeight
         const area = calculateArea(countByColor['red'], countByColor['green'], boundingBoxArea)
@@ -169,7 +170,9 @@ export default function Curve() {
             return <>   </>
         }
 
-        const distribution = {
+        const distribution : {
+            [color: string]: number
+        } = {
             'red': 0,
             'green': 0
         }
@@ -182,7 +185,7 @@ export default function Curve() {
             <div className="flex flex-col justify-center items-center bg-white rounded-xl p-3">
                 <div className="flex flex-row justify-center items-center gap-3">
                     <div className="flex flex-col justify-center items-center">
-                        <h1 className="text-xl font-bold mb-2">Simulated Area : {area}</h1>
+                        <h1 className="text-xl font-bold mb-2">Simulated Area : {area.toFixed(4)}</h1>
                         <div className="flex flex-col justify-center items-center ">
                             <div className="flex flex-col justify-center items-center">
                                 <h1 className="text-xl font-bold mb-2">Hits : {distribution['green']}</h1>
