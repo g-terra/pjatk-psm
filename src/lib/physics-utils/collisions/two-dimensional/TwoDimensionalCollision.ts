@@ -1,4 +1,4 @@
-import {Point} from "@/lib/math-utils/cartesian-helper/Point";
+import {Point} from "@/lib/math-utils/cartesian-helper/model/Point";
 import SingleDimensionCollision from "@/lib/physics-utils/collisions/single-dimensional/SingleDimensionCollision";
 
 export interface TwoDimensionalCollisionResult {

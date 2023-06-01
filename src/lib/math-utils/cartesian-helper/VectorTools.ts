@@ -1,4 +1,4 @@
-import {Vector} from "@/lib/math-utils/cartesian-helper/Vector";
+import {Vector} from "@/lib/math-utils/cartesian-helper/model/Vector";
 
 const rotateVector = (vector: Vector, angle: number) => {
     const angleRad = (angle * Math.PI) / 180;

@@ -1,6 +1,6 @@
 //convert angle to 0-360 positive
 
-import {Point} from "@/lib/math-utils/cartesian-helper/Point";
+import {Point} from "@/lib/math-utils/cartesian-helper/model/Point";
 
 export const normalizeAngle = (angle: number) => {
 
